@@ -26,15 +26,6 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
 
-    def get_max(self):
-        current = self.head
-        max = self.head.value
-        while (current is not None):
-            if current.value > max:
-                max = current.value
-            current = current.next
-        return max
-
     def get(self, key):
         # Check if key exists
         if key not in self.storage:
@@ -44,7 +35,7 @@ class LRUCache:
         while current.value['key'] != key:
             current = current.next
         self.cache.move_to_front(current)
-        # Return the value from storage
+        # Return the value from
         return self.storage[key]
 
     """
