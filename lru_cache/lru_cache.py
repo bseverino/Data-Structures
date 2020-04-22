@@ -13,8 +13,8 @@ class LRUCache:
     def __init__(self, limit=10):
         self.limit = limit
         self.size = 0
-        # List of individual key value pairs
-        self.cache = DoublyLinkedList()
+        # List of keys in order of most recently used
+        self.dll = DoublyLinkedList()
         # Dictionary of all key value pairs
         self.storage = {}
 
@@ -31,12 +31,12 @@ class LRUCache:
         if key not in self.storage:
             return
         # Find the node, then move it to the top
-        current = self.cache.head
-        while current.value['key'] != key:
+        current = self.dll.head
+        while current.value[0] != key:
             current = current.next
-        self.cache.move_to_front(current)
-        # Return the value from
-        return self.storage[key]
+        self.dll.move_to_front(current)
+        # Return the value from storage
+        return current.value[1]
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -53,16 +53,15 @@ class LRUCache:
         # Check if key exists, then overwrite it
         if key in self.storage:
             self.get(key)
-            self.cache.head.value['value'] = value
+            self.dll.head.value = (key, value)
             self.storage[key] = value
         # If key doesn't exist
         else:
-            # Check if cache is full, then delete the oldest value
+            # Check if dll is full, then delete the oldest value
             if self.size == self.limit:
-                del self.storage[self.cache.tail.value['key']]
-                self.cache.remove_from_tail()
-            # Add node to cache and storage
-            self.cache.add_to_head({'key': key, 'value': value})
+                del self.storage[self.dll.tail.value[0]]
+                self.dll.remove_from_tail()
+            # Add node to dll and storage
+            self.dll.add_to_head((key, value))
             self.storage[key] = value
-            self.size = len(self.cache)
-            print('set')
+            self.size = len(self.dll)
