@@ -1,7 +1,5 @@
-import sys
-sys.path.append('../queue_and_stack')
-# from dll_queue import Queue
-# from dll_stack import Stack
+from dll_queue import Queue
+from dll_stack import Stack
 
 
 class BinarySearchTree:
@@ -17,7 +15,7 @@ class BinarySearchTree:
                 self.left.insert(value)
             else:
                 self.left = BinarySearchTree(value)
-        elif value > self.value:
+        elif value >= self.value:
             if self.right:
                 self.right.insert(value)
             else:
@@ -38,9 +36,10 @@ class BinarySearchTree:
 
     # Return the maximum value found in the tree
     def get_max(self):
-        if self.right:
-            return self.right.get_max()
-        return self.value
+        current_max = self
+        while current_max.right:
+            current_max = current_max.right
+        return current_max.value
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
@@ -55,20 +54,31 @@ class BinarySearchTree:
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
-    def in_order_print(self):
+
+    def in_order_print(self, node):
         if self.left:
-            self.left.in_order_print()
+            self.left.in_order_print(node)
         print(self.value)
         if self.right:
-            self.right.in_order_print()
+            self.right.in_order_print(node)
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        queue = Queue()
+        queue.enqueue(node)
+
+        while queue.len() > 0:
+            current_node = queue.dequeue()
+            if current_node.left:
+                queue.enqueue(current_node.left)
+            if current_node.right:
+                queue.enqueue(current_node.right)
+            print(current_node.value)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
+
     def dft_print(self, node):
         pass
 

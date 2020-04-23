@@ -13,7 +13,7 @@ class LRUCache:
     def __init__(self, limit=10):
         self.limit = limit
         self.size = 0
-        # List of keys in order of most recently used
+        # List of key/value tuples in order of most recently used
         self.dll = DoublyLinkedList()
         # Dictionary of all key value pairs
         self.storage = {}
